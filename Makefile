@@ -23,7 +23,7 @@ test-output-sparse : output-sparse
 test : test-output-sparse
 
 install :
-	cp output-sparse ~/bin/
+	@./install.sh
 
 clean :
 	rm -f *.o
