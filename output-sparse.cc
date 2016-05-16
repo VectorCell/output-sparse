@@ -167,7 +167,7 @@ int main (int argc, char *argv[])
 		uint64_t elapsed_ms = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
 		uint64_t elapsed_min = elapsed_ms / 60000;
 		double elapsed_s = (elapsed_ms - (elapsed_min * 60000)) / 1000.0;
-		printf("processed %zu bytes in %lum%gs\n", bytes_written, elapsed_min, elapsed_s);
+		printf("processed %zu bytes in %llum%gs\n", bytes_written, elapsed_min, elapsed_s);
 
 		double rate = bytes_written / (elapsed_ms / 1000.0);
 		vector<string> prefixes = {"", "ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"};
