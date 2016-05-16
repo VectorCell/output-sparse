@@ -57,7 +57,7 @@ bool output_sparse(
 			if (outfile != NULL)
 				fseek(outfile, count, SEEK_CUR);
 			if (verbose) {
-				printf("hole at file index %lu\n", bytes_written);
+				printf("hole at file index %zu\n", bytes_written);
 			}
 		} else {
 			if (outfile != NULL)
@@ -167,7 +167,7 @@ int main (int argc, char *argv[])
 		uint64_t elapsed_ms = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
 		uint64_t elapsed_min = elapsed_ms / 60000;
 		double elapsed_s = (elapsed_ms - (elapsed_min * 60000)) / 1000.0;
-		printf("processed %lu bytes in %lum%gs\n", bytes_written, elapsed_min, elapsed_s);
+		printf("processed %zu bytes in %lum%gs\n", bytes_written, elapsed_min, elapsed_s);
 
 		double rate = bytes_written / (elapsed_ms / 1000.0);
 		vector<string> prefixes = {"", "ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"};
@@ -181,7 +181,7 @@ int main (int argc, char *argv[])
 		}
 
 		float percent = 100 * static_cast<float>(n_skipped_blocks * BLOCKSIZE) / bytes_written;
-		printf("skipped %lu data blocks, representing %g%% of total size\n", n_skipped_blocks, percent);
+		printf("skipped %zu data blocks, representing %g%% of total size\n", n_skipped_blocks, percent);
 	}
 
 	return EXIT_SUCCESS;
