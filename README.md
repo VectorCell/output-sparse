@@ -4,7 +4,7 @@ Tool for creating a sparse copy of an existing file.
 
 Usage:
 ```
-output-sparse [-p] [-v] [-i INPUTFILE] OUTPUTFILE
+output-sparse [FLAGS] [-i INPUTFILE] OUTPUTFILE
 ```
 
 If no input file is specified, input is read from stdin.
