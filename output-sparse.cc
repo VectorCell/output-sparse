@@ -15,7 +15,7 @@
 #include <cstdint>
 
 #include <unistd.h>
-
+#include <inttypes.h>
 
 using namespace std;
 
@@ -106,12 +106,12 @@ bool parse_args (int argc, char *argv[], string& infilename, string& outfilename
 	if (verbose)
 		print_stats = true;
 
-	if (verbose) {
-		cout << "infilename:  " << infilename << endl;
-		cout << "outfilename: " << outfilename << endl;
-		cout << "print_stats: " << (print_stats ? "true" : "false") << endl;
-		cout << "verbose:     " << (verbose ? "true" : "false") << endl;
-	}
+//	if (verbose) {
+//		cout << "infilename:  " << infilename << endl;
+//		cout << "outfilename: " << outfilename << endl;
+//		cout << "print_stats: " << (print_stats ? "true" : "false") << endl;
+//		cout << "verbose:     " << (verbose ? "true" : "false") << endl;
+//	}
 	return true;
 }
 
@@ -165,20 +165,29 @@ int main (int argc, char *argv[])
 
 	if (print_stats) {
 		uint64_t elapsed_ms = chrono::duration_cast<chrono::milliseconds>(stop - start).count();
+		if (elapsed_ms == 0)
+			elapsed_ms = 1;
 		uint64_t elapsed_min = elapsed_ms / 60000;
 		double elapsed_s = (elapsed_ms - (elapsed_min * 60000)) / 1000.0;
-		printf("processed %zu bytes in %llum%gs\n", bytes_written, elapsed_min, elapsed_s);
+		printf("processed %zu bytes in %" PRId64"m%gs\n", bytes_written, elapsed_min, elapsed_s);
 
 		double rate = bytes_written / (elapsed_ms / 1000.0);
 		vector<string> prefixes = {"", "ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"};
-		for (size_t k = 0; k < prefixes.size(); ++k) {
-			if (rate < 1024) {
-				printf("data rate: %g %sB/s\n", rate, prefixes[k].c_str());
-				break;
-			} else {
-				rate /= 1024;
-			}
+		int index = 0;
+		printf("rate: %g\n", rate);
+		while (rate > 1024) {
+			++index;
+			rate /= 1024;
 		}
+		printf("data rate: %g %sB/s\n", rate, prefixes[index].c_str());
+//		for (size_t k = 0; k < prefixes.size(); ++k) {
+//			if (rate < 1024) {
+//				printf("data rate: %g %sB/s\n", rate, prefixes[k].c_str());
+//				break;
+//			} else {
+//				rate /= 1024;
+//			}
+//		}
 
 		float percent = 100 * static_cast<float>(n_skipped_blocks * BLOCKSIZE) / bytes_written;
 		printf("skipped %zu data blocks, representing %g%% of total size\n", n_skipped_blocks, percent);
