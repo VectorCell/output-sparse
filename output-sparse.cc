@@ -106,12 +106,6 @@ bool parse_args (int argc, char *argv[], string& infilename, string& outfilename
 	if (verbose)
 		print_stats = true;
 
-//	if (verbose) {
-//		cout << "infilename:  " << infilename << endl;
-//		cout << "outfilename: " << outfilename << endl;
-//		cout << "print_stats: " << (print_stats ? "true" : "false") << endl;
-//		cout << "verbose:     " << (verbose ? "true" : "false") << endl;
-//	}
 	return true;
 }
 
@@ -180,14 +174,6 @@ int main (int argc, char *argv[])
 			rate /= 1024;
 		}
 		printf("data rate: %g %sB/s\n", rate, prefixes[index].c_str());
-//		for (size_t k = 0; k < prefixes.size(); ++k) {
-//			if (rate < 1024) {
-//				printf("data rate: %g %sB/s\n", rate, prefixes[k].c_str());
-//				break;
-//			} else {
-//				rate /= 1024;
-//			}
-//		}
 
 		float percent = 100 * static_cast<float>(n_skipped_blocks * BLOCKSIZE) / bytes_written;
 		printf("skipped %zu data blocks, representing %g%% of total size\n", n_skipped_blocks, percent);
