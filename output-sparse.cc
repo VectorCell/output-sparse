@@ -163,7 +163,12 @@ int main (int argc, char *argv[])
 			elapsed_ms = 1;
 		uint64_t elapsed_min = elapsed_ms / 60000;
 		double elapsed_s = (elapsed_ms - (elapsed_min * 60000)) / 1000.0;
-		printf("processed %zu bytes in %" PRId64"m%gs\n", bytes_written, elapsed_min, elapsed_s);
+		if (sizeof(long long unsigned) == sizeof(uint64_t))
+			printf("processed %zu bytes in %llum%gs\n", bytes_written, elapsed_min, elapsed_s);
+		else if (sizeof(long unsigned) == sizeof(uint64_t))
+			printf("processed %zu bytes in %llum%gs\n", bytes_written, elapsed_min, elapsed_s);
+		else
+			printf("processed %zu bytes in %um%gs\n", bytes_written, (unsigned)elapsed_min, elapsed_s);
 
 		double rate = bytes_written / (elapsed_ms / 1000.0);
 		vector<string> prefixes = {"", "ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"};
