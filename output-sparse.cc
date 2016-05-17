@@ -164,6 +164,7 @@ int main (int argc, char *argv[])
 		uint64_t elapsed_min = elapsed_ms / 60000;
 		double elapsed_s = (elapsed_ms - (elapsed_min * 60000)) / 1000.0;
 
+		// attempt to accomodate different architectures and word sizes
 		if (sizeof(long long unsigned) == sizeof(uint64_t))
 			printf("processed %zu bytes in %llum%gs\n", bytes_written, (long long unsigned)elapsed_min, elapsed_s);
 		else if (sizeof(long unsigned) == sizeof(uint64_t))
@@ -174,7 +175,6 @@ int main (int argc, char *argv[])
 		double rate = bytes_written / (elapsed_ms / 1000.0);
 		vector<string> prefixes = {"", "ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"};
 		int index = 0;
-		printf("rate: %g\n", rate);
 		while (rate > 1024) {
 			++index;
 			rate /= 1024;
