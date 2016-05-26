@@ -1,10 +1,11 @@
-CSTD   := c99
+CSTD   := c11
 CPPSTD := c++11
 
 ifeq "$(CXX)" "g++"
 	GCCVERSIONLT48 := $(shell expr `gcc -dumpversion` \< 4.8)
 	ifeq "$(GCCVERSIONLT48)" "1"
-		CPPSTD := c++0x
+		CC  := gcc-4.8
+		CXX := g++-4.8
 	endif
 endif
 
