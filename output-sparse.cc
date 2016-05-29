@@ -16,16 +16,25 @@
 
 #include <unistd.h>
 #include <inttypes.h>
+#include <signal.h>
 
 using namespace std;
 
 const int BLOCKSIZE = 4096;
 
+bool stopped = false;
 bool dry_run = false;
 bool print_stats = false;
 bool verbose = false;
 string infilename = "-";
 string outfilename = "-";
+
+void sighandler (int signo)
+{
+	if (signo == SIGINT || signo == SIGTERM) {
+		stopped = true;
+	}
+}
 
 bool is_blk_zeroed (const void *block, size_t size)
 {
@@ -50,7 +59,7 @@ bool output_sparse(
 	n_skipped_blocks = 0;
 	bytes_written = 0;
 	size_t count = 0;
-	while ((count = fread(buf, 1, buffer.size(), infile)) > 0) {
+	while (!stopped && (count = fread(buf, 1, buffer.size(), infile)) > 0) {
 		bytes_written += count;
 		if (is_blk_zeroed(buf, count)) {
 			++n_skipped_blocks;
