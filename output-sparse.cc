@@ -23,7 +23,7 @@ using namespace std;
 
 const int BLOCKSIZE = 4096;
 
-atomic<bool> stopped = false;
+atomic<bool> stopped(false);
 bool dry_run = false;
 bool print_stats = false;
 bool verbose = false;
