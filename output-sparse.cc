@@ -30,6 +30,8 @@ bool verbose = false;
 string infilename = "-";
 string outfilename = "-";
 
+const vector<string> prefixes = {"", "ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"};
+
 void sighandler (int signo)
 {
 	if (signo == SIGINT || signo == SIGTERM) {
@@ -183,22 +185,21 @@ int main (int argc, char *argv[])
 		uint64_t elapsed_min = elapsed_ms / 60000;
 		double elapsed_s = (elapsed_ms - (elapsed_min * 60000)) / 1000.0;
 
-		// attempt to accomodate different architectures and word sizes
-		if (sizeof(long long unsigned) == sizeof(uint64_t))
-			printf("processed %zu bytes in %llum%gs\n", bytes_written, (long long unsigned)elapsed_min, elapsed_s);
-		else if (sizeof(long unsigned) == sizeof(uint64_t))
-			printf("processed %zu bytes in %lum%gs\n", bytes_written, (long unsigned)elapsed_min, elapsed_s);
-		else
-			printf("processed %zu bytes in %um%gs\n", bytes_written, (unsigned)elapsed_min, elapsed_s);
+		double base = bytes_written;
+		int index = 0;
+		while (base > 1024) {
+			++index;
+			base /= 1024;
+		}
+		printf("processed %.4g %sB in %llum%gs ", base, prefixes[index].c_str(), (long long unsigned)elapsed_min, elapsed_s);
 
 		double rate = bytes_written / (elapsed_ms / 1000.0);
-		vector<string> prefixes = {"", "ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi", "Yi"};
-		int index = 0;
+		index = 0;
 		while (rate > 1024) {
 			++index;
 			rate /= 1024;
 		}
-		printf("data rate: %g %sB/s\n", rate, prefixes[index].c_str());
+		printf("(%.4g %sB/s)\n", rate, prefixes[index].c_str());
 
 		float percent = 100 * static_cast<float>(n_skipped_blocks * BLOCKSIZE) / bytes_written;
 		printf("skipped %zu data blocks, representing %g%% of total size\n", n_skipped_blocks, percent);
