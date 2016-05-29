@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <atomic>
 
 #include <cstdio>
 #include <cstdint>
@@ -22,7 +23,7 @@ using namespace std;
 
 const int BLOCKSIZE = 4096;
 
-bool stopped = false;
+atomic<bool> stopped = false;
 bool dry_run = false;
 bool print_stats = false;
 bool verbose = false;
@@ -122,6 +123,15 @@ int main (int argc, char *argv[])
 {
 	if (!parse_args(argc, argv, infilename, outfilename))
 		return EXIT_FAILURE;
+
+	if (signal(SIGINT, sighandler) == SIG_ERR) {
+		fprintf(stderr, "ERROR: unable to set handler for SIGINT.\n");
+		return EXIT_FAILURE;
+	}
+	if (signal(SIGTERM, sighandler) == SIG_ERR) {
+		fprintf(stderr, "ERROR: unable to set handler for SIGTERM.\n");
+		return EXIT_FAILURE;
+	}
 
 	// open in/out files according to args
 	FILE *infile;
