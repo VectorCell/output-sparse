@@ -1,13 +1,13 @@
 CSTD   := c11
 CPPSTD := c++11
 
-ifeq "$(CXX)" "g++"
-	GCCVERSIONLT48 := $(shell expr `gcc -dumpversion` \< 4.8)
-	ifeq "$(GCCVERSIONLT48)" "1"
-		CC  := gcc-4.8
-		CXX := g++-4.8
-	endif
-endif
+#ifeq "$(CXX)" "g++"
+#	GCCVERSIONLT48 := $(shell expr `gcc -dumpversion` \< 4.8)
+#	ifeq "$(GCCVERSIONLT48)" "1"
+#		CC  := gcc-4.8
+#		CXX := g++-4.8
+#	endif
+#endif
 
 CFLAGS   := -pedantic -std=$(CSTD) -Wall -Werror -O3
 CPPFLAGS := -pedantic -std=$(CPPSTD) -Wall -Werror -O3
